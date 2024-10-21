@@ -1,13 +1,24 @@
-deployment "west-coast" {
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+identity_token "aws" {
+  audience = ["aws.workload.identity"]
+}
+
+deployment "development" {
   inputs = {
-    aws_region     = "us-west-1"
-    instance_count = 2
+    regions        = ["us-east-1"]
+    role_arn       = "<YOUR_ROLE_ARN>"
+    identity_token = identity_token.aws.jwt
+    default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
   }
 }
- 
-deployment "east-coast" {
+
+deployment "production" {
   inputs = {
-    aws_region     = "us-east-1"
-    instance_count = 1
+    regions        = ["us-east-1", "us-west-1"]
+    role_arn       = "<YOUR_ROLE_ARN>"
+    identity_token = identity_token.aws.jwt
+    default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
   }
 }
